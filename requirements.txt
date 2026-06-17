@@ -1,0 +1,7 @@
+reflex
+python-dotenv
+httpx
+supabase
+playwright
+gunicorn
+uvicorn

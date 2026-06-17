@@ -1,0 +1,33 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: portfolio-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: reflex run --env prod --backend-only
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SCHEMA
+        value: portfolio
+      - key: ADMIN_PASSWORD
+        sync: false
+
+  # Frontend Static Site
+  - type: static
+    name: portfolio-frontend
+    env: static
+    buildCommand: "reflex export --frontend-only --no-zip && mv .web/_static/* ."
+    staticPublishDir: .
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: portfolio-backend
+          property: host
